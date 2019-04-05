@@ -6,16 +6,16 @@ public class Player : MonoBehaviour
 {
     enum ROLL_MODE
     {
-        not,    //回転していない
-        right,  //右回転
-        reft,   //左回転
+        not = 0,    //回転していない
+        right = 1,  //右回転
+        left = -1,  //左回転
     }
+    //IEnumerator roll;
     ROLL_MODE mode = ROLL_MODE.not;
-    Vector3 pos;
-    float rollCount = 0;
     const float ROLL_MAX = 90f;
     const float ROLL_TIME = 2f;
     Transform corePos;
+    float rollCount = 0f;
     // Start is called before the first frame update
     void Start()
     {
@@ -31,36 +31,48 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log(rollCount);
-        //inputKey();
-        if (Input.GetKeyDown(KeyCode.A))
+        inputKey();
+        roll();
+    }
+
+    void inputKey()
+    {
+        if (Input.GetKeyDown(KeyCode.A) && mode == ROLL_MODE.not)
         {
-            //transform.Rotate(new Vector3(0f, rollSpeed() * Time.deltaTime));
-            transform.RotateAround(corePos.position, transform.up, ROLL_MAX);
+            mode = ROLL_MODE.right;
+            //roll = Roll();
+            //StartCoroutine(roll);
         }
-        if (Input.GetKeyDown(KeyCode.D))
+        if (Input.GetKeyDown(KeyCode.D) && mode == ROLL_MODE.not)
         {
-            //transform.Rotate(new Vector3(0f, -rollSpeed() * Time.deltaTime));
-            transform.RotateAround(corePos.position, transform.up, -ROLL_MAX);
+            mode = ROLL_MODE.left;
+            //roll = Roll();
+            //StartCoroutine(roll);
         }
     }
 
-    //void roll()
+    //IEnumerator Roll()
     //{
-
-    //}
-
-    //void inputKey()
-    //{
-    //    if (Input.GetKeyDown(KeyCode.A))
+    //    while (true)
     //    {
-    //        mode = ROLL_MODE.reft;
-    //    }
-    //    if (Input.GetKeyDown(KeyCode.D))
-    //    {
-    //        mode = ROLL_MODE.right;
+    //        transform.RotateAround(corePos.position, transform.up, rollSpeed() * (int)mode);
+    //        yield return new WaitForSeconds(ROLL_TIME);
     //    }
     //}
+
+    void roll()
+    {
+        if (rollCount < ROLL_MAX)
+        {
+            transform.RotateAround(corePos.position, transform.up, rollSpeed() * (int)mode * Time.deltaTime);
+            rollCount += rollSpeed() * Time.deltaTime;
+        }
+        else
+        {
+            rollCount = 0f;
+            mode = ROLL_MODE.not;
+        }
+    }
 
     float rollSpeed()
     {
