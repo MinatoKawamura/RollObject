@@ -17,15 +17,15 @@ public class CoreMove : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.UpArrow))
         {
-            transform.localPosition = new Vector3(pos1, 0f, pos2);
+            transform.localPosition = new Vector3(pos1, 1f, pos2);
         }
         if (Input.GetKeyDown(KeyCode.DownArrow))
         {
-            transform.localPosition = new Vector3(pos1, 0f, pos1);
+            transform.localPosition = new Vector3(pos1, 1f, pos1);
         }
         if (Input.GetKeyDown(KeyCode.RightArrow))
         {
-            transform.localPosition = new Vector3(pos2, 0f, pos1);
+            transform.localPosition = new Vector3(pos2, 1f, pos1);
         }
     }
 }

@@ -40,8 +40,8 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //inputKey();
-        //roll();
+        inputKey();
+        roll();
     }
 
     //キー入力したら左右どちらの回転かを判断
@@ -62,19 +62,9 @@ public class Player : MonoBehaviour
     {
         if (rollCount < ROLL_MAX)
         {
-            transform.RotateAround(corePos.position, transform.up, rollSpeed() * (int)mode * Time.deltaTime);
-            rollCount += rollSpeed() * Time.deltaTime;
-        }
-        else
-        {
-            rollCount = 0f;
+            transform.RotateAround(corePos.position, transform.up, 90 * (int)mode);
             mode = ROLL_MODE.not;
         }
-    }
-
-    float rollSpeed()
-    {
-        return ROLL_MAX / ROLL_TIME;
     }
 
     void TestRoll()
