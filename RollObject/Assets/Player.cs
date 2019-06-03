@@ -67,9 +67,9 @@ public class Player : MonoBehaviour
         }
     }
 
-    void TestRoll()
-    {
-        Quaternion deltaRotation = Quaternion.Euler(speed * Time.deltaTime);
-        rBody.MoveRotation(rBody.rotation * deltaRotation);
-    }
+    //void TestRoll()
+    //{
+    //    Quaternion deltaRotation = Quaternion.Euler(speed * Time.deltaTime);
+    //    rBody.MoveRotation(rBody.rotation * deltaRotation);
+    //}
 }
