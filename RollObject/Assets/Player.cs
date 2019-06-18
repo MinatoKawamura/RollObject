@@ -15,6 +15,7 @@ public class Player : MonoBehaviour
     const float ROLL_TIME = 2f;
     Transform corePos;
     float rollCount = 0f;
+    List<Transform> box = new List<Transform>();
 
     //test
     Rigidbody rBody;
@@ -24,14 +25,17 @@ public class Player : MonoBehaviour
     void Start()
     {
         //回転の中心のオブジェクトを取得する
-        foreach (Transform core in gameObject.transform)
+        foreach (Transform g_Object in gameObject.transform)
         {
-            if (core.name == "Core")
+            if (g_Object.name == "Core")
             {
-                corePos = core.transform;
+                corePos = g_Object.transform;
+            }
+            else
+            {
+                box.Add(g_Object);
             }
         }
-
         //test
         rBody = GetComponent<Rigidbody>();
         speed = new Vector3(0, 90, 0);
@@ -67,9 +71,12 @@ public class Player : MonoBehaviour
         }
     }
 
-    //void TestRoll()
-    //{
-    //    Quaternion deltaRotation = Quaternion.Euler(speed * Time.deltaTime);
-    //    rBody.MoveRotation(rBody.rotation * deltaRotation);
-    //}
+    void TestRoll()
+    {
+        transform.RotateAround(corePos.position, transform.up, 90 * (int)mode);
+        for(int i = 0; i > box.Count; i++)
+        {
+            Collider[] hitColliders = Physics.OverlapBox();
+        }
+    }
 }
