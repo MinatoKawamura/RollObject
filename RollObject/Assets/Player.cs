@@ -11,41 +11,31 @@ public class Player : MonoBehaviour
         left = -1,  //左回転
     }
     ROLL_MODE mode = ROLL_MODE.not;
-    const float ROLL_MAX = 90f;
-    const float ROLL_TIME = 2f;
-    Transform corePos;
-    float rollCount = 0f;
-    List<Transform> box = new List<Transform>();
-
-    //test
-    Rigidbody rBody;
-    Vector3 speed;
+    Transform corePos;//回転の中心のポジション
+    public List<Transform> box = new List<Transform>();//オブジェクトを形成している
 
     // Start is called before the first frame update
     void Start()
     {
-        //回転の中心のオブジェクトを取得する
         foreach (Transform g_Object in gameObject.transform)
         {
+            //回転の中心のオブジェクトを取得する
             if (g_Object.name == "Core")
             {
                 corePos = g_Object.transform;
             }
+            //回転の中心以外のオブジェクトを取得する
             else
             {
                 box.Add(g_Object);
             }
         }
-        //test
-        rBody = GetComponent<Rigidbody>();
-        speed = new Vector3(0, 90, 0);
     }
 
     // Update is called once per frame
     void Update()
     {
         inputKey();
-        roll();
     }
 
     //キー入力したら左右どちらの回転かを判断
@@ -53,30 +43,40 @@ public class Player : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.A) && mode == ROLL_MODE.not)
         {
-            mode = ROLL_MODE.right;
+            mode = ROLL_MODE.left;//左回転
+            roll();
         }
         if (Input.GetKeyDown(KeyCode.D) && mode == ROLL_MODE.not)
         {
-            mode = ROLL_MODE.left;
+            mode = ROLL_MODE.right;//右回転
+            roll();
         }
     }
 
     //回転させる
     void roll()
     {
-        if (rollCount < ROLL_MAX)
+        //回転
+        transform.RotateAround(corePos.position, transform.up, 90 * (int)mode);
+        //回転後の場所にブロックが存在したらもとに戻す
+        if (boxHit())
         {
-            transform.RotateAround(corePos.position, transform.up, 90 * (int)mode);
-            mode = ROLL_MODE.not;
+            transform.RotateAround(corePos.position, transform.up, 90 * -(int)mode);
         }
+        mode = ROLL_MODE.not;//回転を止める
     }
 
-    void TestRoll()
+    //回転後にブロックがあるかどうかの判定
+    bool boxHit()
     {
-        transform.RotateAround(corePos.position, transform.up, 90 * (int)mode);
-        for(int i = 0; i > box.Count; i++)
+        for(int i = 0; i < box.Count; i++)
         {
-            Collider[] hitColliders = Physics.OverlapBox();
+            Collider[] hitColliders = Physics.OverlapBox(box[i].position, new Vector3(0.25f, 0.25f, 0.25f));
+            if(hitColliders.Length > 0)
+            {
+                return true;//ブロックがあったらtrueを返す
+            }
         }
+        return false;//ブロックが無かったらfalseを返す
     }
 }
