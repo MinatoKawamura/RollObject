@@ -25,7 +25,7 @@ public class Player : MonoBehaviour
                 corePos = g_Object.transform;
             }
             //回転の中心以外のオブジェクトを取得する
-            else
+            else if(g_Object.tag == "Box")
             {
                 box.Add(g_Object);
             }
@@ -35,46 +35,53 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        inputKey();
+        InputKey();
     }
 
     //キー入力したら左右どちらの回転かを判断
-    void inputKey()
+    void InputKey()
     {
         if (Input.GetKeyDown(KeyCode.A) && mode == ROLL_MODE.not)
         {
             mode = ROLL_MODE.left;//左回転
-            roll();
+            Roll();
         }
         if (Input.GetKeyDown(KeyCode.D) && mode == ROLL_MODE.not)
         {
             mode = ROLL_MODE.right;//右回転
-            roll();
+            Roll();
         }
     }
 
     //回転させる
-    void roll()
+    void Roll()
     {
         //回転
         transform.RotateAround(corePos.position, transform.up, 90 * (int)mode);
         //回転後の場所にブロックが存在したらもとに戻す
-        if (boxHit())
+        if (BoxHit())
         {
             transform.RotateAround(corePos.position, transform.up, 90 * -(int)mode);
         }
         mode = ROLL_MODE.not;//回転を止める
     }
 
-    //回転後にブロックがあるかどうかの判定
-    bool boxHit()
+    //回転後に通れないブロックがあるかどうかの判定
+    bool BoxHit()
     {
         for(int i = 0; i < box.Count; i++)
         {
+            //コライダーを配列に入れる
             Collider[] hitColliders = Physics.OverlapBox(box[i].position, new Vector3(0.25f, 0.25f, 0.25f));
             if(hitColliders.Length > 0)
             {
-                return true;//ブロックがあったらtrueを返す
+                for (int j = 0; j < hitColliders.Length; j++)
+                {
+                    if (hitColliders[j].tag == "Cube")
+                    {
+                        return true;//Cubeがあったらtrueを返す
+                    }
+                }
             }
         }
         return false;//ブロックが無かったらfalseを返す
