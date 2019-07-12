@@ -7,7 +7,7 @@ public class CoreMove : MonoBehaviour
         TapCoreMove();
     }
 
-    //タッチした場所に回転の中心（コア）を移動させる
+    //クリックした場所に回転の中心(Core)を移動させる※今後タッチにも対応させる
     void TapCoreMove()
     {
         if (Input.GetMouseButtonDown(0))

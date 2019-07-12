@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class Player : MonoBehaviour
@@ -12,7 +11,8 @@ public class Player : MonoBehaviour
     }
     ROLL_MODE mode = ROLL_MODE.not;
     Transform corePos;//回転の中心のポジション
-    public List<Transform> box = new List<Transform>();//オブジェクトを形成している
+    public List<Transform> box = new List<Transform>();//プレイヤーを形成しているブロック
+    public int goalCount = 0;
 
     // Start is called before the first frame update
     void Start()
@@ -38,7 +38,7 @@ public class Player : MonoBehaviour
         InputKey();
     }
 
-    //キー入力したら左右どちらの回転かを判断
+    //キー入力したら左右どちらの回転かを判断　※今後回転を滑らかにするためmodeを指定
     void InputKey()
     {
         if (Input.GetKeyDown(KeyCode.A) && mode == ROLL_MODE.not)
