@@ -3,16 +3,20 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    enum ROLL_MODE
+    public enum ROLL_MODE
     {
         not = 0,    //回転していない
         right = 1,  //右回転
         left = -1,  //左回転
     }
-    ROLL_MODE mode = ROLL_MODE.not;
+    public ROLL_MODE mode = ROLL_MODE.not;
     Transform corePos;//回転の中心のポジション
     public List<Transform> box = new List<Transform>();//プレイヤーを形成しているブロック
     public int goalCount = 0;
+    Vector3 mouseDownPosition;
+    Vector3 mouseUpPosition;
+    float mousePositionChange = 0f;
+    float MOUSE_CHANGE = 50f;
 
     // Start is called before the first frame update
     void Start()
@@ -35,7 +39,7 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        InputKey();
+        MousePosition();
     }
 
     //キー入力したら左右どちらの回転かを判断　※今後回転を滑らかにするためmodeを指定
@@ -49,6 +53,34 @@ public class Player : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.D) && mode == ROLL_MODE.not)
         {
             mode = ROLL_MODE.right;//右回転
+            Roll();
+        }
+    }
+
+    void MousePosition()
+    {
+        if (Input.GetMouseButtonDown(0))
+        {
+            mouseDownPosition = Input.mousePosition;
+        }
+        if (Input.GetMouseButtonUp(0))
+        {
+            mouseUpPosition = Input.mousePosition;
+            MousePositionChange();
+        }
+    }
+
+    void MousePositionChange()
+    {
+        mousePositionChange = mouseDownPosition.x - mouseUpPosition.x;
+        if(mousePositionChange >= MOUSE_CHANGE && mode == ROLL_MODE.not)
+        {
+            mode = ROLL_MODE.left;
+            Roll();
+        }
+        if(mousePositionChange <= -MOUSE_CHANGE && mode == ROLL_MODE.not)
+        {
+            mode = ROLL_MODE.right;
             Roll();
         }
     }

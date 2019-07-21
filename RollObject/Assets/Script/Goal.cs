@@ -23,7 +23,7 @@ public class Goal : MonoBehaviour
         if(other.transform.tag == "Box")
         {
             player.goalCount++;
-            if (player.goalCount > player.box.Count)
+            if (player.goalCount >= player.box.Count)
             {
                 Debug.Log("クリア");
             }
